@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "./dist/lib/lockfile-mutex/" },
+  "include": ["./src"]
+}
