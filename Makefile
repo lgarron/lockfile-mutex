@@ -1,6 +1,13 @@
 .PHONY: build
-build: setup
-	bun run ./script/build.ts
+build: build-js build-types
+
+.PHONY: build-js
+build-js: setup
+	bun run ./script/build-js.ts
+
+.PHONY: build-types
+build-types: setup
+	bun x tsc --project ./tsconfig.build.json
 
 .PHONY: test
 test: setup
