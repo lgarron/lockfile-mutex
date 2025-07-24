@@ -24,5 +24,6 @@
     "@types/xdg-basedir": "^4.0.2",
     "esbuild": "^0.25.8",
     "xdg-basedir": "^5.1.0"
-  }
+  },
+  "files": ["./dist/", "./src/"]
 }
