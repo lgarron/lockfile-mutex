@@ -60,4 +60,4 @@ If you need to coordinate across multiple users on a system, you will need to se
 
 ## Intermediate directories
 
-Note that `lockfile-mutex` will create intermediate directories to a lockfile if needed. To avoid debuggin issues and edge cases, these intermediate directories are *not* cleaned afterwards.
+Note that `lockfile-mutex` will create intermediate directories to a lockfile if needed. To avoid debugging issues and edge cases, these intermediate directories are *not* cleaned afterwards.
