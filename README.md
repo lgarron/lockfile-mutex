@@ -15,7 +15,6 @@ a new backup from starting until the previous one has finished.
 
 ```ts
 import { LockfileMutex } from "lockfile-mutex";
-import { exit } from "node:process";
 
 // Two possible outcomes:
 //
