@@ -1,7 +1,7 @@
 import { default as assert } from "node:assert";
 import { LockfileMutex } from "lockfile-mutex";
 
-const lockfileMutex = new LockfileMutex("./.temp/test/example2");
+const lockfileMutex = new LockfileMutex("path/to/lockfile");
 
 // Try to lock and check the result (`boolean`)
 if (lockfileMutex.lock()) {

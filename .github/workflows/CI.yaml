@@ -28,4 +28,5 @@ jobs:
       - run: make setup
       - run: make lint-biome
       - run: make lint-tsc
+      - run: make lint-readme
       - run: make test

@@ -13,7 +13,7 @@ a new backup from starting until the previous one has finished.
 
 ## Simple usage
 
-```ts
+````ts example1
 import { LockfileMutex } from "lockfile-mutex";
 
 // Two possible outcomes:
@@ -22,11 +22,11 @@ import { LockfileMutex } from "lockfile-mutex";
 // - Failure: an error is thrown.
 //
 LockfileMutex.locked("path/to/lockfile");
-```
+````
 
 ## Advanced usage
 
-```ts
+````ts example2
 import { default as assert } from "node:assert";
 import { LockfileMutex } from "lockfile-mutex";
 
@@ -42,19 +42,22 @@ assert(lockfileMutex.lock());
 
 // Unlock
 lockfileMutex.unlock();
-```
+````
 
 ## Lockfile location
 
 If you need to place a lockfile in a consistent location, consider the user's [XDG state directory](https://specifications.freedesktop.org/basedir-spec/latest/#basics):
 
-```ts
+````ts example3
+import { default as assert } from "node:assert";
 import { join } from "node:path";
-import { xdgState } from "xdg-basedir";
 import { LockfileMutex } from "lockfile-mutex";
+import { xdgState } from "xdg-basedir";
 
-const { success } = LockfileMutex.locked(join(xdgState, "example/lockfile"));
-```
+assert(xdgState); // Or handle otherwise.
+
+LockfileMutex.locked(join(xdgState, "lockfile-mutex/example/lockfile"));
+````
 
 If you need to coordinate across multiple users on a system, you will need to select a common path that they all have access to (e.g. under `/tmp/`).
 
