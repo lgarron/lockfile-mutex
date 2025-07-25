@@ -14,7 +14,6 @@
     }
   },
   "dependencies": {
-    "@types/node": "^24.1.0",
     "node-cleanup": "^2.1.2"
   },
   "devDependencies": {
@@ -23,6 +22,7 @@
     "@types/bun": "^1.2.19",
     "@types/xdg-basedir": "^4.0.2",
     "esbuild": "^0.25.8",
+    "typescript": "^5.8.3",
     "xdg-basedir": "^5.1.0"
   },
   "files": [
