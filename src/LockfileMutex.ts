@@ -100,25 +100,25 @@ export class LockfileMutex {
    *     LockfileMutex.locked("./.temp/test/.lockfile");
    *
    *     // Query for lock success instead.
-   *     const { isLocked } = LockfileMutex.locked("./.temp/test/.lockfile", { errorOnLockFailure: false });
+   *     const { success } = LockfileMutex.locked("./.temp/test/.lockfile", { errorOnLockFailure: false });
    *
    */
   static locked(
     lockfilePath: string,
     options: LockfileMutexOptions & { errorOnLockFailure?: boolean } = {},
-  ): { lockfileMutex: LockfileMutex; isLocked: boolean } {
+  ): { lockfileMutex: LockfileMutex; success: boolean } {
     const lockfileMutex = new LockfileMutex(lockfilePath, options);
-    const lockSucceeded = lockfileMutex.lock();
+    const success = lockfileMutex.lock();
     const { isLocked } = lockfileMutex;
-    if (lockSucceeded !== isLocked) {
-      console.log({ lockSucceeded, isLocked });
+    if (success !== isLocked) {
+      console.log({ lockSucceeded: success, isLocked });
       throw new Error("Inconsistent locking state!");
     }
     const errorOnLockFailure = options?.errorOnLockFailure ?? true;
     if (!isLocked && errorOnLockFailure) {
       throw new Error("Could not lock.");
     }
-    return { lockfileMutex, isLocked };
+    return { lockfileMutex, success };
   }
 
   /**

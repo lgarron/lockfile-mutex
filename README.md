@@ -53,7 +53,7 @@ import { join } from "node:path";
 import { xdgState } from "xdg-basedir";
 import { LockfileMutex } from "lockfile-mutex";
 
-const { isLocked } = LockfileMutex.locked(join(xdgState, "example/lockfile"));
+const { success } = LockfileMutex.locked(join(xdgState, "example/lockfile"));
 ```
 
 If you need to coordinate across multiple users on a system, you will need to select a common path that they all have access to (e.g. under `/tmp/`).

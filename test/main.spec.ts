@@ -29,11 +29,11 @@ test(".lock()", async () => {
 
 test(".locked()", async () => {
   await rm("./.temp/test/.lockfile2", { force: true });
-  const { lockfileMutex, isLocked } = LockfileMutex.locked(
+  const { lockfileMutex, success } = LockfileMutex.locked(
     "./.temp/test/.lockfile2",
     {},
   );
-  expect(isLocked).toBe(true);
+  expect(success).toBe(true);
   expect(lockfileMutex.isLocked).toBe(true);
   lockfileMutex.unlock();
   expect(lockfileMutex.isLocked).toBe(false);
@@ -61,12 +61,12 @@ test("contention", async () => {
 
 test(".locked() → errorOnLockfileFailure", async () => {
   await rm("./.temp/test/.lockfile3", { force: true });
-  expect(LockfileMutex.locked("./.temp/test/.lockfile4").isLocked).toBe(true);
+  expect(LockfileMutex.locked("./.temp/test/.lockfile4").success).toBe(true);
   expect(() => LockfileMutex.locked("./.temp/test/.lockfile4")).toThrow();
   expect(
     LockfileMutex.locked("./.temp/test/.lockfile4", {
       errorOnLockFailure: false,
-    }).isLocked,
+    }).success,
   ).toBe(false);
 });
 
