@@ -1,5 +1,5 @@
 import { default as assert } from "node:assert";
-import { LockfileMutex } from "../src";
+import { LockfileMutex } from "lockfile-mutex";
 
 const lockfileMutex = new LockfileMutex("./.temp/test/example2");
 

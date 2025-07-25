@@ -1,4 +1,4 @@
-import { LockfileMutex } from "../src";
+import { LockfileMutex } from "lockfile-mutex";
 
 // Two possible outcomes:
 //

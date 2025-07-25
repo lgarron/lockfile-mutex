@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import { rm, writeFile } from "node:fs/promises";
 import { sleep } from "bun";
-import { LockfileMutex } from "../src";
+import { LockfileMutex } from "lockfile-mutex";
 import { existingLockfileAgeSync } from "../src/LockfileMutex";
 
 // TODO: `nodeCleanup()` doesn't run in these tests.
