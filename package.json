@@ -1,7 +1,7 @@
 {
   "name": "lockfile-mutex",
   "author": "Lucas Garron",
-  "version": "0.1.2-dev",
+  "version": "0.2.0",
   "type": "module",
   "description": "Implementation a of a mutex using lockfile on the filesystem.",
   "repository": "github:lgarron/lockfile-mutex.js",
