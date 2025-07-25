@@ -46,3 +46,6 @@ reset: clean
 .PHONY: publish
 publish:
 	npm publish
+
+.PHONY: prepublishOnly
+prepublishOnly: lint test clean build
