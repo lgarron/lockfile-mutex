@@ -27,8 +27,7 @@
   },
   "files": [
     "./dist/",
-    "./src/",
-    "./tsconfig.json"
+    "./src/"
   ],
   "scripts": {
     "prepublishOnly": "make prepublishOnly"
