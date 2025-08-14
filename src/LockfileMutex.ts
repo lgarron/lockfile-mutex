@@ -120,7 +120,9 @@ export class LockfileMutex {
     }
     const errorOnLockFailure = options?.errorOnLockFailure ?? true;
     if (!lockIsHeldByThisInstance && errorOnLockFailure) {
-      throw new Error("Could not lock.");
+      throw new Error(
+        "Could not acquire lock. This is likely because another instance is holding the lock.",
+      );
     }
     return { lockfileMutex, success };
   }
