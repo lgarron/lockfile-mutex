@@ -12,15 +12,15 @@ test(".lock()", async () => {
 
   // Run through a few cycles.
   for (let i = 0; i < 3; i++) {
-    expect(lockfileMutex.isLocked).toBe(false);
+    expect(lockfileMutex.lockIsHeldByThisInstance).toBe(false);
     expect(lockfileMutex.lock()).toBe(true);
     expect(lockfileMutex.lock()).toBe(true);
 
     expect(lockfileMutex.lock({ idempotent: false })).toBe(false);
-    expect(lockfileMutex.isLocked).toBe(true);
+    expect(lockfileMutex.lockIsHeldByThisInstance).toBe(true);
 
     expect(() => lockfileMutex.unlock()).not.toThrow();
-    expect(lockfileMutex.isLocked).toBe(false);
+    expect(lockfileMutex.lockIsHeldByThisInstance).toBe(false);
     expect(() => lockfileMutex.unlock()).not.toThrow();
     expect(() => lockfileMutex.unlock({ idempotent: false })).toThrow();
     sleep(i * 100);
@@ -34,9 +34,9 @@ test(".locked()", async () => {
     {},
   );
   expect(success).toBe(true);
-  expect(lockfileMutex.isLocked).toBe(true);
+  expect(lockfileMutex.lockIsHeldByThisInstance).toBe(true);
   lockfileMutex.unlock();
-  expect(lockfileMutex.isLocked).toBe(false);
+  expect(lockfileMutex.lockIsHeldByThisInstance).toBe(false);
 });
 
 test("contention", async () => {

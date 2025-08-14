@@ -12,9 +12,9 @@ import { dirname } from "node:path";
 
 // We don't support `immediatelyLocked` because there is no way for the
 // constructor to return whether the locking was successful. We could rely on
-// the called to call `.isLocked` but this is not ideal. We want the lock
-// success to be explicitly reflected in the return type of something the user
-// *has* to call.
+// the called to call `.lockIsHeldByThisInstance` but this is not ideal. We want
+// the lock success to be explicitly reflected in the return type of something
+// the user *has* to call.
 export interface LockfileMutexOptions {
   /** Defaults to: 60_000 */
   timeoutMilliseconds?: number;
@@ -45,7 +45,8 @@ const REFRESH_TIMEOUT_FRACTION = 0.45;
  * Note:
  *
  * - This implementation uses synchronous `.lock()` and `.unlock()`
- *   implementations to simplify the model underlying the `.isLocked` state.
+ *   implementations to simplify the model underlying the
+ *   `.lockIsHeldByThisInstance` state.
  * - This implementation will create intermediate directories to a lockfile if
  *   needed. To avoid debuggin issues and edge cases, these intermediate
  *   directories are *not* cleaned afterwards.
@@ -86,7 +87,7 @@ export class LockfileMutex {
         // The API doesn't specify that an async handler can be used here. We
         // perform a sync operation to avoid a race condition (even if it's
         // unlikely in practice).
-        if (this.isLocked) {
+        if (this.lockIsHeldByThisInstance) {
           rmSync(this.#lockfilePath);
         }
       });
@@ -109,13 +110,16 @@ export class LockfileMutex {
   ): { lockfileMutex: LockfileMutex; success: boolean } {
     const lockfileMutex = new LockfileMutex(lockfilePath, options);
     const success = lockfileMutex.lock();
-    const { isLocked } = lockfileMutex;
-    if (success !== isLocked) {
-      console.log({ lockSucceeded: success, isLocked });
+    const { lockIsHeldByThisInstance } = lockfileMutex;
+    if (success !== lockIsHeldByThisInstance) {
+      console.log({
+        lockSucceeded: success,
+        lockIsHeldByThisInstance,
+      });
       throw new Error("Inconsistent locking state!");
     }
     const errorOnLockFailure = options?.errorOnLockFailure ?? true;
-    if (!isLocked && errorOnLockFailure) {
+    if (!lockIsHeldByThisInstance && errorOnLockFailure) {
       throw new Error("Could not lock.");
     }
     return { lockfileMutex, success };
@@ -125,11 +129,12 @@ export class LockfileMutex {
    * Returns if we have the lock when the function returns.
    *
    * - `options.idempotent` defaults to `true`.
-   *   - If it is set to `false`, then `false` is also returned in the case `.isLocked` is `true`.
+   *   - If it is set to `false`, then `false` is also returned in the case
+   *     `.lockIsHeldByThisInstance` is `true`.
    *
    */
   lock(options?: { idempotent?: boolean }): boolean {
-    if (this.isLocked) {
+    if (this.lockIsHeldByThisInstance) {
       const idempotent = options?.idempotent ?? true;
       return idempotent;
     }
@@ -168,10 +173,12 @@ export class LockfileMutex {
   }
 
   /**
-   * - `options.idempotent` defaults to `true`. If it is set to `false`, then this function will throw an error in the case `.isLocked` is `false`.
+   * - `options.idempotent` defaults to `true`. If it is set to `false`, then
+   *   this function will throw an error in the case `.lockIsHeldByThisInstance`
+   *   is `false`.
    */
   unlock(options?: { idempotent?: boolean }): void {
-    if (!this.isLocked) {
+    if (!this.lockIsHeldByThisInstance) {
       const idempotent = options?.idempotent ?? true;
       if (!idempotent) {
         throw new Error(
@@ -184,7 +191,7 @@ export class LockfileMutex {
     this.#setToUnlocked();
   }
 
-  get isLocked(): boolean {
+  get lockIsHeldByThisInstance(): boolean {
     return !!this.#intervalAbortController;
   }
 
@@ -205,7 +212,7 @@ export class LockfileMutex {
           ref: false,
         },
       )) {
-        if (!this.isLocked) {
+        if (!this.lockIsHeldByThisInstance) {
           return;
         }
         // We use `async` here because this is "hot" code, i.e. code that runs
