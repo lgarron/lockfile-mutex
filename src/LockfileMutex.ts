@@ -134,6 +134,8 @@ export class LockfileMutex {
    *   - If it is set to `false`, then `false` is also returned in the case
    *     `.lockIsHeldByThisInstance` is `true`.
    *
+   * May throw an error if there was an issue with the file system that is not
+   * caused by normal lock contention.
    */
   lock(options?: { idempotent?: boolean }): boolean {
     if (this.lockIsHeldByThisInstance) {
@@ -148,7 +150,10 @@ export class LockfileMutex {
     } catch (e) {
       // Note: we assume time is monotonic enough.
       if ((e as Error & { code?: string }).code !== "EEXIST") {
-        throw new Error("Could not acquire lockfile mutex");
+        throw new Error(
+          "Unexpected file system error when trying to acquire the lockfile mutex: " +
+            e,
+        );
       }
       if (
         !(
