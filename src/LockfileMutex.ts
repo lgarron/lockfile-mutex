@@ -98,13 +98,13 @@ export class LockfileMutex {
    * Convenience function to turn some use cases into one-liners.
    *
    *     // If this does not error, we've acquired a lock for the lifetime of the program.
-   *     LockfileMutex.locked("./.temp/test/.lockfile");
+   *     LockfileMutex.newLocked("./.temp/test/.lockfile");
    *
    *     // Query for lock success instead.
-   *     const { success } = LockfileMutex.locked("./.temp/test/.lockfile", { errorOnLockFailure: false });
+   *     const { success } = LockfileMutex.newLocked("./.temp/test/.lockfile", { errorOnLockFailure: false });
    *
    */
-  static locked(
+  static newLocked(
     lockfilePath: string,
     options: LockfileMutexOptions & { errorOnLockFailure?: boolean } = {},
   ): { lockfileMutex: LockfileMutex; success: boolean } {

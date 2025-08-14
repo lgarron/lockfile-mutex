@@ -29,7 +29,7 @@ test(".lock()", async () => {
 
 test(".locked()", async () => {
   await rm("./.temp/test/.lockfile2", { force: true });
-  const { lockfileMutex, success } = LockfileMutex.locked(
+  const { lockfileMutex, success } = LockfileMutex.newLocked(
     "./.temp/test/.lockfile2",
     {},
   );
@@ -61,10 +61,10 @@ test("contention", async () => {
 
 test(".locked() → errorOnLockfileFailure", async () => {
   await rm("./.temp/test/.lockfile3", { force: true });
-  expect(LockfileMutex.locked("./.temp/test/.lockfile4").success).toBe(true);
-  expect(() => LockfileMutex.locked("./.temp/test/.lockfile4")).toThrow();
+  expect(LockfileMutex.newLocked("./.temp/test/.lockfile4").success).toBe(true);
+  expect(() => LockfileMutex.newLocked("./.temp/test/.lockfile4")).toThrow();
   expect(
-    LockfileMutex.locked("./.temp/test/.lockfile4", {
+    LockfileMutex.newLocked("./.temp/test/.lockfile4", {
       errorOnLockFailure: false,
     }).success,
   ).toBe(false);
@@ -72,7 +72,7 @@ test(".locked() → errorOnLockfileFailure", async () => {
 
 test("short", async () => {
   await rm("./.temp/test/.lockfile4", { force: true });
-  LockfileMutex.locked("./.temp/test/.lockfile5", {
+  LockfileMutex.newLocked("./.temp/test/.lockfile5", {
     timeoutMilliseconds: 10,
   });
   await sleep(105);

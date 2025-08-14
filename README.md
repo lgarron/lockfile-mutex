@@ -21,7 +21,7 @@ import { LockfileMutex } from "lockfile-mutex";
 // - Success: The lock will be held for the lifetime of the process and released at the end.
 // - Failure: an error is thrown.
 //
-LockfileMutex.locked("path/to/lockfile");
+LockfileMutex.newLocked("path/to/lockfile");
 ````
 
 ## Advanced usage
@@ -56,7 +56,7 @@ import { xdgState } from "xdg-basedir";
 
 assert(xdgState); // Or handle otherwise.
 
-LockfileMutex.locked(join(xdgState, "lockfile-mutex/example/lockfile"));
+LockfileMutex.newLocked(join(xdgState, "lockfile-mutex/example/lockfile"));
 ````
 
 If you need to coordinate across multiple users on a system, you will need to select a common path that they all have access to (e.g. under `/tmp/`).

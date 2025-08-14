@@ -5,4 +5,4 @@ import { xdgState } from "xdg-basedir";
 
 assert(xdgState); // Or handle otherwise.
 
-LockfileMutex.locked(join(xdgState, "lockfile-mutex/example/lockfile"));
+LockfileMutex.newLocked(join(xdgState, "lockfile-mutex/example/lockfile"));
