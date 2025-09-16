@@ -1,8 +1,8 @@
-import { default as assert } from "node:assert";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { LockfileMutex } from "lockfile-mutex";
-import { xdgState } from "xdg-basedir";
+import { xdgRuntime, xdgState } from "xdg-basedir";
 
-assert(xdgState); // Or handle otherwise.
+const dir = xdgRuntime ?? xdgState ?? tmpdir();
 
-LockfileMutex.newLocked(join(xdgState, "lockfile-mutex/example/lockfile"));
+LockfileMutex.newLocked(join(dir, "lockfile-mutex/example/lockfile"));
