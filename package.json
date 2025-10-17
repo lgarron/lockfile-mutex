@@ -14,7 +14,8 @@
     }
   },
   "dependencies": {
-    "node-cleanup": "^2.1.2"
+    "node-cleanup": "^2.1.2",
+    "path-class": "^0.4.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.2",

@@ -9,6 +9,7 @@ import "./vendor/node-cleanup.types";
 import { mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
+import type { Path } from "path-class";
 
 // We don't support `immediatelyLocked` because there is no way for the
 // constructor to return whether the locking was successful. We could rely on
@@ -79,8 +80,10 @@ export class LockfileMutex {
    *     await lockfileMutex.unlock();
    *
    */
-  constructor(lockfilePath: string, options: LockfileMutexOptions = {}) {
-    this.#lockfilePath = lockfilePath;
+  constructor(lockfilePath: string | Path, options: LockfileMutexOptions = {}) {
+    // Performing the check in this way avoids pulling in `path-class` as a runtime dependency.
+    this.#lockfilePath =
+      typeof lockfilePath === "string" ? lockfilePath : lockfilePath.path;
     this.#options = options;
     if (this.#unlockOnProcessExit) {
       nodeCleanup(() => {
@@ -105,7 +108,7 @@ export class LockfileMutex {
    *
    */
   static newLocked(
-    lockfilePath: string,
+    lockfilePath: string | Path,
     options: LockfileMutexOptions & { errorOnLockFailure?: boolean } = {},
   ): { lockfileMutex: LockfileMutex; success: boolean } {
     const lockfileMutex = new LockfileMutex(lockfilePath, options);
