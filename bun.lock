@@ -13,6 +13,7 @@
         "@types/bun": "^1.2.20",
         "@types/xdg-basedir": "^4.0.2",
         "esbuild": "^0.25.8",
+        "readme-cli-help": "^0.1.10",
         "typescript": "^5.8.3",
         "xdg-basedir": "^5.1.0",
       },
@@ -108,6 +109,8 @@
     "node-cleanup": ["node-cleanup@2.1.2", "", {}, "sha512-qN8v/s2PAJwGUtr1/hYTpNKlD6Y9rc4p8KSmJXyGdYGZsDGKXrGThikLFP9OCHFeLeEpQzPwiAtdIvBLqm//Hw=="],
 
     "path-class": ["path-class@0.4.0", "", { "dependencies": { "@types/node": "^24.7.1", "xdg-basedir": "^5.1.0" } }, "sha512-LPNzTXTxrnKDbZWV6Fn9vxGbJHU4meiFJPXn8LoZiZdXO65wt09P5OHSrsjRk5kZXQWWc3EIyMtKQ/fr4Xt77w=="],
+
+    "readme-cli-help": ["readme-cli-help@0.1.10", "", { "peerDependencies": { "typescript": "^5.0.0" }, "bin": { "readme-cli-help": "main.ts" } }, "sha512-HBu72nVFqoLIBtEQJo1bC+z9zPqz1D84pPSS9mjGPS35AFAoW0Qif7TJVotIpToWVwmjljF0EXeo9Qgy3KbxxQ=="],
 
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
