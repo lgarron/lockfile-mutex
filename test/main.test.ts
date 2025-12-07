@@ -124,3 +124,13 @@ test("using/dispose (`.newLocked(…)`)", async () => {
     }).success,
   ).toBe(true);
 });
+
+test("existingLockfileAgeSync(…)", async () => {
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  const lockfileMutex = new LockfileMutex(lockfilePath);
+  expect(() => existingLockfileAgeSync(lockfilePath)).toThrow(/^ENOENT:/);
+  lockfileMutex.lock();
+  expect(existingLockfileAgeSync(lockfilePath)).toBeLessThan(100); // This is usually instant, so 100ms should be long enough.
+  await sleep(100);
+  expect(existingLockfileAgeSync(lockfilePath)).toBeGreaterThanOrEqual(100);
+});
