@@ -78,3 +78,45 @@ test("short", async () => {
   await sleep(105);
   expect(existingLockfileAgeSync("./.temp/test/.lockfile5")).toBeLessThan(10);
 });
+
+test("using/dispose (constructor)", async () => {
+  await rm("./.temp/test/.lockfile6", { force: true });
+  {
+    using lockfileMutex = new LockfileMutex("./.temp/test/.lockfile6");
+    expect(lockfileMutex.lock()).toBe(true);
+    expect(
+      LockfileMutex.newLocked("./.temp/test/.lockfile6", {
+        errorOnLockFailure: false,
+      }).success,
+    ).toBe(false);
+  }
+  expect(
+    LockfileMutex.newLocked("./.temp/test/.lockfile6", {
+      errorOnLockFailure: false,
+    }).success,
+  ).toBe(true);
+});
+
+test("using/dispose (never locked)", async () => {
+  await rm("./.temp/test/.lockfile7", { force: true });
+  using _lockfileMutex = new LockfileMutex("./.temp/test/.lockfile6");
+});
+
+test("using/dispose (`.newLocked(…)`)", async () => {
+  await rm("./.temp/test/.lockfile8", { force: true });
+  {
+    using _lockfileMutex = LockfileMutex.newLocked(
+      "./.temp/test/.lockfile8",
+    ).lockfileMutex;
+    expect(
+      LockfileMutex.newLocked("./.temp/test/.lockfile8", {
+        errorOnLockFailure: false,
+      }).success,
+    ).toBe(false);
+  }
+  expect(
+    LockfileMutex.newLocked("./.temp/test/.lockfile8", {
+      errorOnLockFailure: false,
+    }).success,
+  ).toBe(true);
+});

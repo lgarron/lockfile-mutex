@@ -42,6 +42,11 @@ assert(lockfileMutex.lock());
 
 // Unlock
 lockfileMutex.unlock();
+
+{
+  using _ = LockfileMutex.newLocked("path/to/lockfile");
+  // The lockfile will be automatically unlocked at the end of this block.
+}
 ````
 
 ## Lockfile location

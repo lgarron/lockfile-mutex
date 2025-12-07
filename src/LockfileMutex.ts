@@ -86,14 +86,13 @@ export class LockfileMutex {
     this.#options = options;
     if (this.#unlockOnProcessExit) {
       nodeCleanup(() => {
-        // The API doesn't specify that an async handler can be used here. We
-        // perform a sync operation to avoid a race condition (even if it's
-        // unlikely in practice).
-        if (this.lockIsHeldByThisInstance) {
-          rmSync(this.#lockfilePath);
-        }
+        this.unlock();
       });
     }
+  }
+
+  [Symbol.dispose]() {
+    this.unlock();
   }
 
   /**
@@ -109,7 +108,11 @@ export class LockfileMutex {
   static newLocked(
     lockfilePath: string | Path,
     options: LockfileMutexOptions & { errorOnLockFailure?: boolean } = {},
-  ): { lockfileMutex: LockfileMutex; success: boolean } {
+  ): {
+    lockfileMutex: LockfileMutex;
+    success: boolean;
+    [Symbol.dispose]: () => void;
+  } {
     const lockfileMutex = new LockfileMutex(lockfilePath, options);
     const success = lockfileMutex.lock();
     const { lockIsHeldByThisInstance } = lockfileMutex;
@@ -126,7 +129,8 @@ export class LockfileMutex {
         "Could not acquire lock. This is likely because another instance is holding the lock.",
       );
     }
-    return { lockfileMutex, success };
+    const dispose = lockfileMutex[Symbol.dispose].bind(lockfileMutex);
+    return { lockfileMutex, success, [Symbol.dispose]: dispose };
   }
 
   /**
