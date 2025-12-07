@@ -6,7 +6,7 @@
       "name": "lockfile-mutex",
       "dependencies": {
         "node-cleanup": "^2.1.2",
-        "path-class": ">=0.6.1",
+        "path-class": ">=0.10.3",
       },
       "devDependencies": {
         "@biomejs/biome": "^2.1.2",
@@ -121,7 +121,7 @@
 
     "node-cleanup": ["node-cleanup@2.1.2", "", {}, "sha512-qN8v/s2PAJwGUtr1/hYTpNKlD6Y9rc4p8KSmJXyGdYGZsDGKXrGThikLFP9OCHFeLeEpQzPwiAtdIvBLqm//Hw=="],
 
-    "path-class": ["path-class@0.6.1", "", { "dependencies": { "@types/node": "^24.7.1", "xdg-basedir": "^5.1.0" } }, "sha512-38ZYmRh38kFSKivJCHk9S4ZHOK4Wf6ocxHfYBdDmVN7GWVOXrYsxwMBQpjhGyPNBdiPo4W3X91x2TzGmxHBlUg=="],
+    "path-class": ["path-class@0.10.3", "", { "dependencies": { "@types/node": "^24.7.1", "xdg-basedir": "^5.1.0" } }, "sha512-teUDitVwoVlJTDOXb/WGwDcxRvcwVVdDh8IpfYzZ+E4FaPNtfE7py0eNE2mCNZ10m1IckTpQjCG2cujpw42tTw=="],
 
     "plural-chain": ["plural-chain@0.2.3", "", {}, "sha512-iqzW8/mS8+Yveu1mZtoEtdmg0yglWDM7mL1bKzD4H+BlMaGCl/Ig0oTfSy4oEm6A20sgLS0zWaLbgmRemr1bFg=="],
 
@@ -142,8 +142,6 @@
     "xdg-basedir": ["xdg-basedir@5.1.0", "", {}, "sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ=="],
 
     "printable-shell-command/path-class": ["path-class@0.10.2", "", { "dependencies": { "@types/node": "^24.7.1", "readme-cli-help": ">=0.3.1", "xdg-basedir": "^5.1.0" } }, "sha512-5NxurdtQiVkRdB1m738O7s1eQQdLr9VGPbRWsUDs2hqEEqhfENcgbQHC+s5zczhwtAzppmrB8VHijJi5NwE2Sg=="],
-
-    "readme-cli-help/path-class": ["path-class@0.10.3", "", { "dependencies": { "@types/node": "^24.7.1", "xdg-basedir": "^5.1.0" } }, "sha512-teUDitVwoVlJTDOXb/WGwDcxRvcwVVdDh8IpfYzZ+E4FaPNtfE7py0eNE2mCNZ10m1IckTpQjCG2cujpw42tTw=="],
 
     "printable-shell-command/path-class/readme-cli-help": ["readme-cli-help@0.4.0", "", { "dependencies": { "@optique/core": ">=0.7.2", "@optique/run": ">=0.7.2", "path-class": ">=0.10.2", "plural-chain": "^0.2.1", "printable-shell-command": "^2.7.3" }, "bin": { "readme-cli-help": "src/main.ts" } }, "sha512-606vRZWMDm1K1zeYC9GxOUqTOUNmUFBRDKwISuy57MNwVO4Uffr5eSP2ozjliTf3YJQ5V2NSNJs5GuEV0TN2+w=="],
 
