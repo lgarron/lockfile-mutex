@@ -248,6 +248,6 @@ export class LockfileMutex {
  *
  * Returns: age in milliseconds
  */
-export function existingLockfileAgeSync(lockfilePath: string): number {
-  return Date.now() - statSync(lockfilePath).mtimeMs;
+export function existingLockfileAgeSync(lockfilePath: string | Path): number {
+  return Date.now() - statSync(stringifyIfPath(lockfilePath)).mtimeMs;
 }
