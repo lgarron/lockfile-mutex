@@ -60,7 +60,7 @@ test("contention", async () => {
 });
 
 test(".locked() → errorOnLockfileFailure", async () => {
-  await rm("./.temp/test/.lockfile3", { force: true });
+  await rm("./.temp/test/.lockfile4", { force: true });
   expect(LockfileMutex.newLocked("./.temp/test/.lockfile4").success).toBe(true);
   expect(() => LockfileMutex.newLocked("./.temp/test/.lockfile4")).toThrow();
   expect(
@@ -71,7 +71,7 @@ test(".locked() → errorOnLockfileFailure", async () => {
 });
 
 test("short", async () => {
-  await rm("./.temp/test/.lockfile4", { force: true });
+  await rm("./.temp/test/.lockfile5", { force: true });
   LockfileMutex.newLocked("./.temp/test/.lockfile5", {
     timeoutMilliseconds: 10,
   });
