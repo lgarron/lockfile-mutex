@@ -1,14 +1,23 @@
 import { expect, test } from "bun:test";
-import { rm, writeFile } from "node:fs/promises";
 import { sleep } from "bun";
 import { LockfileMutex } from "lockfile-mutex";
+import { Path } from "path-class";
 import { existingLockfileAgeSync } from "../src/LockfileMutex";
 
 // TODO: `nodeCleanup()` doesn't run in these tests.
 
+test("Bare string constructor and", async () => {
+  const lockfileMutex = new LockfileMutex("./.temp/lockfile");
+  expect(await new Path("./.temp/lockfile").exists()).toBe(false);
+  lockfileMutex.lock();
+  expect(await new Path("./.temp/lockfile").exists()).toBe(true);
+  lockfileMutex.unlock();
+  expect(await new Path("./.temp/lockfile").exists()).toBe(false);
+});
+
 test(".lock()", async () => {
-  await rm("./.temp/test/.lockfile1", { force: true });
-  const lockfileMutex = new LockfileMutex("./.temp/test/.lockfile1");
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  const lockfileMutex = new LockfileMutex(lockfilePath);
 
   // Run through a few cycles.
   for (let i = 0; i < 3; i++) {
@@ -28,11 +37,8 @@ test(".lock()", async () => {
 });
 
 test(".locked()", async () => {
-  await rm("./.temp/test/.lockfile2", { force: true });
-  const { lockfileMutex, success } = LockfileMutex.newLocked(
-    "./.temp/test/.lockfile2",
-    {},
-  );
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  const { lockfileMutex, success } = LockfileMutex.newLocked(lockfilePath, {});
   expect(success).toBe(true);
   expect(lockfileMutex.lockIsHeldByThisInstance).toBe(true);
   lockfileMutex.unlock();
@@ -40,11 +46,11 @@ test(".locked()", async () => {
 });
 
 test("contention", async () => {
-  await rm("./.temp/test/.lockfile3", { force: true });
-  const lockfileMutex1 = new LockfileMutex("./.temp/test/.lockfile3", {
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  const lockfileMutex1 = new LockfileMutex(lockfilePath, {
     timeoutMilliseconds: 100,
   });
-  const lockfileMutex2 = new LockfileMutex("./.temp/test/.lockfile3", {
+  const lockfileMutex2 = new LockfileMutex(lockfilePath, {
     timeoutMilliseconds: 100,
   });
 
@@ -52,7 +58,7 @@ test("contention", async () => {
   expect(lockfileMutex2.lock()).toBe(false);
 
   lockfileMutex1.unlock();
-  await writeFile("./.temp/test/.lockfile3", "");
+  await lockfilePath.write("");
   expect(lockfileMutex2.lock()).toBe(false);
   await sleep(110);
   expect(lockfileMutex2.lock()).toBe(true);
@@ -60,62 +66,60 @@ test("contention", async () => {
 });
 
 test(".locked() → errorOnLockfileFailure", async () => {
-  await rm("./.temp/test/.lockfile4", { force: true });
-  expect(LockfileMutex.newLocked("./.temp/test/.lockfile4").success).toBe(true);
-  expect(() => LockfileMutex.newLocked("./.temp/test/.lockfile4")).toThrow();
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  expect(LockfileMutex.newLocked(lockfilePath).success).toBe(true);
+  expect(() => LockfileMutex.newLocked(lockfilePath)).toThrow();
   expect(
-    LockfileMutex.newLocked("./.temp/test/.lockfile4", {
+    LockfileMutex.newLocked(lockfilePath, {
       errorOnLockFailure: false,
     }).success,
   ).toBe(false);
 });
 
 test("short", async () => {
-  await rm("./.temp/test/.lockfile5", { force: true });
-  LockfileMutex.newLocked("./.temp/test/.lockfile5", {
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  LockfileMutex.newLocked(lockfilePath, {
     timeoutMilliseconds: 10,
   });
   await sleep(105);
-  expect(existingLockfileAgeSync("./.temp/test/.lockfile5")).toBeLessThan(10);
+  expect(existingLockfileAgeSync(lockfilePath)).toBeLessThan(10);
 });
 
 test("using/dispose (constructor)", async () => {
-  await rm("./.temp/test/.lockfile6", { force: true });
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
   {
-    using lockfileMutex = new LockfileMutex("./.temp/test/.lockfile6");
+    using lockfileMutex = new LockfileMutex(lockfilePath);
     expect(lockfileMutex.lock()).toBe(true);
     expect(
-      LockfileMutex.newLocked("./.temp/test/.lockfile6", {
+      LockfileMutex.newLocked(lockfilePath, {
         errorOnLockFailure: false,
       }).success,
     ).toBe(false);
   }
   expect(
-    LockfileMutex.newLocked("./.temp/test/.lockfile6", {
+    LockfileMutex.newLocked(lockfilePath, {
       errorOnLockFailure: false,
     }).success,
   ).toBe(true);
 });
 
 test("using/dispose (never locked)", async () => {
-  await rm("./.temp/test/.lockfile7", { force: true });
-  using _lockfileMutex = new LockfileMutex("./.temp/test/.lockfile6");
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
+  using _lockfileMutex = new LockfileMutex(lockfilePath);
 });
 
 test("using/dispose (`.newLocked(…)`)", async () => {
-  await rm("./.temp/test/.lockfile8", { force: true });
+  const lockfilePath = (await Path.makeTempDir()).join("lockfile");
   {
-    using _lockfileMutex = LockfileMutex.newLocked(
-      "./.temp/test/.lockfile8",
-    ).lockfileMutex;
+    using _lockfileMutex = LockfileMutex.newLocked(lockfilePath).lockfileMutex;
     expect(
-      LockfileMutex.newLocked("./.temp/test/.lockfile8", {
+      LockfileMutex.newLocked(lockfilePath, {
         errorOnLockFailure: false,
       }).success,
     ).toBe(false);
   }
   expect(
-    LockfileMutex.newLocked("./.temp/test/.lockfile8", {
+    LockfileMutex.newLocked(lockfilePath, {
       errorOnLockFailure: false,
     }).success,
   ).toBe(true);
