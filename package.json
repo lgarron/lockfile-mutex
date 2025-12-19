@@ -1,12 +1,16 @@
 {
   "name": "lockfile-mutex",
-  "author": "Lucas Garron",
   "version": "0.3.8-dev",
-  "type": "module",
   "description": "Implementation a of a mutex using lockfile on the filesystem.",
-  "repository": "github:lgarron/lockfile-mutex.js",
+  "author": "Lucas Garron",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgarron/lockfile-mutex.js.git"
+  },
+  "type": "module",
   "main": "./dist/lib/lockfile-mutex/index.js",
+  "types": "./dist/lib/lockfile-mutex/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/lib/lockfile-mutex/index.d.ts",
