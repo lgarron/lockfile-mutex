@@ -15,6 +15,7 @@ jobs:
       - run: make setup
       - run: make build-js
       - run: make build-types
+      - run: make check-package.json
 
   test:
     runs-on: ubuntu-latest

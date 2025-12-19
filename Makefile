@@ -1,6 +1,9 @@
 .PHONY: build
 build: build-js build-types
 
+.PHONY: check
+check: lint test build check-package.json
+
 .PHONY: build-js
 build-js: setup
 	bun run ./script/build-js.ts
@@ -36,6 +39,10 @@ format: setup
 	bun x @biomejs/biome check --write
 	bun x readme-cli-help update
 
+.PHONY: check-package.json
+check-package.json:
+	bun x --package @cubing/dev-config package.json check
+
 .PHONY: setup
 setup:
 	bun install --frozen-lockfile
@@ -53,4 +60,4 @@ publish:
 	npm publish
 
 .PHONY: prepublishOnly
-prepublishOnly: lint test clean build
+prepublishOnly: clean check build
