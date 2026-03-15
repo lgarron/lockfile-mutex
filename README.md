@@ -54,14 +54,11 @@ lockfileMutex.unlock();
 If you need to place a lockfile in a consistent location, consider the user's [XDG state directory](https://specifications.freedesktop.org/basedir-spec/latest/#basics):
 
 ````ts example3
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { LockfileMutex } from "lockfile-mutex";
-import { xdgRuntime, xdgState } from "xdg-basedir";
+import { Path } from "path-class";
 
-const dir = xdgRuntime ?? xdgState ?? tmpdir();
-
-LockfileMutex.newLocked(join(dir, "lockfile-mutex/example/lockfile"));
+const path = Path.xdg.runtimeWithStateFallback.join("example-app/lockfile");
+LockfileMutex.newLocked(path);
 ````
 
 If you need to coordinate across multiple users on a system, you will need to select a common path that they all have access to (e.g. under `/tmp/`).

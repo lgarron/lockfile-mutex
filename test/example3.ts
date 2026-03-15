@@ -1,8 +1,5 @@
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { LockfileMutex } from "lockfile-mutex";
-import { xdgRuntime, xdgState } from "xdg-basedir";
+import { Path } from "path-class";
 
-const dir = xdgRuntime ?? xdgState ?? tmpdir();
-
-LockfileMutex.newLocked(join(dir, "lockfile-mutex/example/lockfile"));
+const path = Path.xdg.runtimeWithStateFallback.join("example-app/lockfile");
+LockfileMutex.newLocked(path);

@@ -181,7 +181,7 @@ export class LockfileMutex {
     }
 
     // Note: we invoke an `async` function here but purposely don't return it.
-    this.#keepFresh();
+    void this.#keepFresh();
     return true;
   }
 
