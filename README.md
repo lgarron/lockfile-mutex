@@ -1,3 +1,23 @@
+# 🏔️ Moved to Codeberg 🏔️
+
+This repo is now maintained at:
+
+<span style="font-size: 200%"><a href="https://codeberg.org/lgarron/lockfile-mutex">https://codeberg.org/lgarron/lockfile-mutex</a></span>
+
+Original README contents are below.
+
+<br>
+<br>
+<br>
+<br>
+
+--------
+
+<br>
+<br>
+<br>
+<br>
+
 # `lockfile-mutex`
 
 Implementation a of a mutex using lockfile on the filesystem. If you use the
